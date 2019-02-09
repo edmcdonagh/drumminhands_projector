@@ -23,14 +23,15 @@ num_files = 0 # how many total pics to show
 file_list = []  # a list of all images being shown
 
 def mount_pics():
-    try:
-        # mount the drive 
-        cmd = "sudo mount -t cifs "+config_projector.server_mount_path+" "+config_projector.client_mount_path+" -o user="+config_projector.user_name+",pass="+config_projector.user_password
-        os.system(cmd)
-    except Exception, e:
-        tb = sys.exc_info()[2]
-        traceback.print_exception(e.__class__, e, tb)
-        print "Error mounting shared drive"
+	pass
+#    try:
+#        # mount the drive 
+#        cmd = "sudo mount -t cifs "+config_projector.server_mount_path+" "+config_projector.client_mount_path+" -o user="+config_projector.user_name+",pass="+config_projector.user_password
+#        os.system(cmd)
+#    except Exception, e:
+#        tb = sys.exc_info()[2]
+#        traceback.print_exception(e.__class__, e, tb)
+#        print "Error mounting shared drive"
 
 def walktree(top, callback):
     """recursively descend the directory tree rooted at top, calling the
@@ -45,7 +46,7 @@ def walktree(top, callback):
             callback(pathname)
         else:
             # Unknown file type, print a message
-            print 'Skipping %s' % pathname
+            print('Skipping {0}').format(pathname)
 
 
 def addtolist(file, extensions=['.jpg','.jpeg']):
@@ -65,9 +66,9 @@ def addtolist(file, extensions=['.jpg','.jpeg']):
                     # show prime slide at regular intervals
                     file_list.append(config_projector.prime_slide) # start with the prime slide
         else:
-            print 'Skipping: ', file, ' (thumbnail image)'
+            print('Skipping: {0} (thumbnail image)'.format(file))
     else:
-        print 'Skipping: ', file, ' (NOT a supported image)'
+        print('Skipping: {0} (NOT a supported image)'.format(file))
 
 
 def input(events):
@@ -138,8 +139,8 @@ def main():
 
     # Test for image support
     if not pygame.image.get_extended():
-        print "Your Pygame isn't built with extended image support."
-        print "It's likely this isn't going to work."
+        print("Your Pygame isn't built with extended image support.")
+        print("It's likely this isn't going to work.")
         sys.exit(1)
 
     modes = pygame.display.list_modes()
@@ -169,17 +170,17 @@ def main():
             input(pygame.event.get())
             time.sleep(config_projector.waittime)
         except pygame.error as err:
-            print "Failed to display %s: %s" % (file_list[current], err)
+            print("Failed to display {0}: {1}".format(file_list[current], err))
 
         # When we get to the end, re-start at the beginning and check for new files
         current = current + 1;
         if (current == num_files):
-            print '----------------------- Restart slideshow -----------------------'
+            print('----------------------- Restart slideshow -----------------------')
             find_pics() # check for available images to display
 
-print 'Projector running'
+print('Projector running')
 
-print 'Waiting a bit to make sure the photo booth has time to boot.'
+print('Waiting a bit to make sure the photo booth has time to boot.')
 time.sleep(300) # wait a bit until the other RPi is connected
 
 mount_pics() # mount the drive on startup of program
